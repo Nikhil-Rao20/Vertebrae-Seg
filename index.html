@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertebrae 3D Viewer - BodyMaps Research</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0f0f1e;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styles */
+        nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            gap: 30px;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+        }
+
+        nav select {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .view-buttons-nav {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .view-btn-nav {
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .view-btn-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .view-btn-nav.active {
+            background: white;
+            color: #667eea;
+        }
+
+        .vertebrae-toggle {
+            position: relative;
+        }
+
+        .toggle-btn {
+            padding: 8px 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            border-radius: 6px;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-btn:hover {
+            background: white;
+        }
+
+        .dropdown-panel {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            width: 320px;
+            max-height: 500px;
+            overflow-y: auto;
+            display: none;
+            z-index: 2000;
+        }
+
+        .dropdown-panel.show {
+            display: block;
+        }
+
+        .dropdown-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .group-header {
+            background: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .group-header:hover {
+            background: #ebebeb;
+        }
+
+        .vertebra-item {
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .vertebra-item:hover {
+            background: #f8f8f8;
+        }
+
+        .vertebra-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .vertebra-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .vertebra-name {
+            font-size: 13px;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 8px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .action-buttons button:hover {
+            background: #5568d3;
+        }
+
+        /* Viewer Styles */
+        .viewer-container {
+            flex: 1;
+            position: relative;
+            background: #0f0f1e;
+            overflow: hidden;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px 60px;
+            border-radius: 15px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 4px solid #333;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        #info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #fff;
+            backdrop-filter: blur(10px);
+        }
+
+        #status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.95);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: white;
+            font-weight: 600;
+            display: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #status-badge.cleaned {
+            background: rgba(34, 197, 94, 0.95);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+        }
+
+        #status-badge .badge-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-bottom: 2px;
+        }
+
+        #status-badge .badge-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: #1a1a2e;
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 2px solid #667eea;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .footer-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .nav-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .dropdown-panel {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-brand">🦴 Vertebrae 3D Viewer</div>
+            
+            <div class="nav-controls">
+                <div class="nav-group">
+                    <span class="nav-label">Patient:</span>
+                    <select id="patient-select">
+                        <option value="">Select patient...</option>
+                        <option value="BDMAP_00000006">BDMAP_00000006</option>
+                        <option value="BDMAP_00000031">BDMAP_00000031</option>
+                    </select>
+                </div>
+
+                <div class="nav-group">
+                    <span class="nav-label">Processing:</span>
+                    <select id="processing-select">
+                        <option value="raw">Raw Prediction</option>
+                        <option value="cleaned">Post-Processed</option>
+                    </select>
+                </div>
+
+                <div class="nav-group">
+                    <span class="nav-label">View:</span>
+                    <div class="view-buttons-nav">
+                        <button class="view-btn-nav active" onclick="setView('3d')">3D</button>
+                        <button class="view-btn-nav" onclick="setView('front')">Front</button>
+                        <button class="view-btn-nav" onclick="setView('side')">Side</button>
+                        <button class="view-btn-nav" onclick="setView('top')">Top</button>
+                    </div>
+                </div>
+
+                <div class="vertebrae-toggle">
+                    <button class="toggle-btn" onclick="toggleDropdown()">
+                        <span>Vertebrae Controls</span>
+                        <span id="dropdown-arrow">▼</span>
+                    </button>
+                    <div class="dropdown-panel" id="vertebrae-dropdown">
+                        <div class="dropdown-header">Select Vertebrae</div>
+                        
+                        <div class="group-header" onclick="toggleGroup('cervical')">
+                            <span>Cervical (C1-C7)</span>
+                            <span class="group-toggle" id="cervical-toggle">▼</span>
+                        </div>
+                        <div id="cervical-group"></div>
+
+                        <div class="group-header" onclick="toggleGroup('thoracic')">
+                            <span>Thoracic (T1-T12)</span>
+                            <span class="group-toggle" id="thoracic-toggle">▼</span>
+                        </div>
+                        <div id="thoracic-group"></div>
+
+                        <div class="group-header" onclick="toggleGroup('lumbar')">
+                            <span>Lumbar (L1-L5)</span>
+                            <span class="group-toggle" id="lumbar-toggle">▼</span>
+                        </div>
+                        <div id="lumbar-group"></div>
+
+                        <div class="action-buttons">
+                            <button onclick="selectAll()">Select All</button>
+                            <button onclick="deselectAll()">Deselect All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="viewer-container">
+        <canvas id="canvas"></canvas>
+        <div id="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading vertebrae...</div>
+        </div>
+        <div id="status-badge">
+            <div class="badge-label">Processing Type</div>
+            <div class="badge-value">Raw Prediction</div>
+        </div>
+        <div id="info">
+            <strong>Controls:</strong> Left Click: Rotate | Right Click: Pan | Scroll: Zoom
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-title">Research Assistant Work - BodyMaps Program</div>
+            <div class="footer-text">Johns Hopkins University</div>
+            <div class="footer-text">
+                Developed by <strong>Nikhileswara Rao Sulake</strong> | 
+                <a href="https://nikhil-rao20.github.io" target="_blank" class="footer-link">nikhil-rao20.github.io</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
