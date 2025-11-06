@@ -3,8 +3,8 @@
 
 let scene, camera, renderer;
 let vertebraeMeshes = {};
-let currentPatient = null;
-let currentProcessingType = 'raw'; // 'raw' or 'cleaned'
+let currentPatient = 'BDMAP_00000006'; // Default patient
+let currentProcessingType = 'raw'; // 'raw', 'cleaned', or 'difference'
 let patientData = {};
 
 // Vertebrae groups
@@ -25,6 +25,9 @@ function init() {
     setupEventListeners();
     animate();
     console.log('✓ Viewer initialized');
+    
+    // Load default patient
+    loadPatient(currentPatient, currentProcessingType);
 }
 
 function setupScene() {
@@ -154,19 +157,43 @@ function setupControls() {
 }
 
 function setupEventListeners() {
-    document.getElementById('patient-select').addEventListener('change', function() {
-        if (this.value) {
-            currentPatient = this.value;
-            loadPatient(currentPatient, currentProcessingType);
-        }
-    });
+    // No longer need patient-select dropdown
+}
+
+function setPatient(patientId) {
+    currentPatient = patientId;
     
-    document.getElementById('processing-select').addEventListener('change', function() {
-        currentProcessingType = this.value;
-        if (currentPatient) {
-            loadPatient(currentPatient, currentProcessingType);
-        }
+    // Update button styles
+    document.querySelectorAll('.nav-group:first-child .processing-btn').forEach(btn => {
+        btn.classList.remove('active');
     });
+    event.target.classList.add('active');
+    
+    // Load patient with current mode
+    loadPatient(currentPatient, currentProcessingType);
+}
+
+function setProcessingMode(mode) {
+    currentProcessingType = mode;
+    
+    // Update button styles
+    document.querySelectorAll('.nav-group:nth-child(2) .processing-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Show/hide legend based on mode
+    const legend = document.getElementById('legend');
+    if (mode === 'difference') {
+        legend.classList.add('show');
+    } else {
+        legend.classList.remove('show');
+    }
+    
+    // Load patient with new mode
+    if (currentPatient) {
+        loadPatient(currentPatient, currentProcessingType);
+    }
 }
 
 function populateVertebraeList() {
@@ -214,9 +241,18 @@ async function loadPatient(patientId, processingType = 'raw') {
     currentProcessingType = processingType;
     showLoading(true);
     
-    // Determine folder based on processing type
-    const folder = processingType === 'cleaned' ? `${patientId}_cleaned` : patientId;
-    const processingLabel = processingType === 'cleaned' ? 'Post-Processed' : 'Raw Prediction';
+    // Determine folder and label based on processing type
+    let folder, processingLabel;
+    if (processingType === 'difference') {
+        folder = `${patientId}_difference`;
+        processingLabel = 'Difference (Raw vs Post-Processed)';
+    } else if (processingType === 'cleaned') {
+        folder = `${patientId}_cleaned`;
+        processingLabel = 'Post-Processed';
+    } else {
+        folder = patientId;
+        processingLabel = 'Raw Prediction';
+    }
     
     console.log(`Loading patient: ${patientId} (${processingLabel})`);
     
@@ -231,21 +267,31 @@ async function loadPatient(patientId, processingType = 'raw') {
         // Clear existing meshes
         clearMeshes();
         
-        // Load all vertebrae
+        // Load vertebrae
         const vertebrae = data.vertebrae;
         let loadedCount = 0;
         const totalCount = Object.keys(vertebrae).length;
         
         document.querySelector('.loading-text').textContent = `Loading ${processingLabel}...`;
         
-        for (const [name, info] of Object.entries(vertebrae)) {
-            await loadVertebra(name, info);
-            loadedCount++;
-            console.log(`Loaded ${loadedCount}/${totalCount}: ${name}`);
+        if (processingType === 'difference') {
+            // Load difference meshes (removed and added parts ONLY)
+            for (const [name, info] of Object.entries(vertebrae)) {
+                await loadDifferenceMeshes(name, info);
+                loadedCount++;
+                console.log(`Loaded ${loadedCount}/${totalCount}: ${name} (difference)`);
+            }
+        } else {
+            // Load normal vertebrae meshes
+            for (const [name, info] of Object.entries(vertebrae)) {
+                await loadVertebra(name, info);
+                loadedCount++;
+                console.log(`Loaded ${loadedCount}/${totalCount}: ${name}`);
+            }
+            
+            // Update color boxes in UI
+            updateColorBoxes();
         }
-        
-        // Update color boxes in UI
-        updateColorBoxes();
         
         // Center the loaded data
         centerScene();
@@ -270,8 +316,16 @@ function centerScene() {
     // Calculate bounding box of all meshes
     const box = new THREE.Box3();
     
-    Object.values(vertebraeMeshes).forEach(mesh => {
-        box.expandByObject(mesh);
+    Object.values(vertebraeMeshes).forEach(meshOrArray => {
+        if (Array.isArray(meshOrArray)) {
+            // Difference mode - array of meshes
+            meshOrArray.forEach(mesh => {
+                box.expandByObject(mesh);
+            });
+        } else {
+            // Normal mode - single mesh
+            box.expandByObject(meshOrArray);
+        }
     });
     
     // Get center of bounding box
@@ -279,8 +333,16 @@ function centerScene() {
     box.getCenter(center);
     
     // Move all meshes so center is at origin
-    Object.values(vertebraeMeshes).forEach(mesh => {
-        mesh.position.sub(center);
+    Object.values(vertebraeMeshes).forEach(meshOrArray => {
+        if (Array.isArray(meshOrArray)) {
+            // Difference mode - array of meshes
+            meshOrArray.forEach(mesh => {
+                mesh.position.sub(center);
+            });
+        } else {
+            // Normal mode - single mesh
+            meshOrArray.position.sub(center);
+        }
     });
     
     console.log('Scene centered at origin');
@@ -332,19 +394,119 @@ async function loadVertebra(name, info) {
     }
 }
 
+async function loadDifferenceMeshes(name, info) {
+    try {
+        const meshes = info.meshes || {};
+        const loadedMeshes = [];
+        
+        // Load removed parts (red - False Positives)
+        if (meshes.removed) {
+            const response = await fetch(meshes.removed.file);
+            if (response.ok) {
+                const meshData = await response.json();
+                const mesh = createMeshFromData(meshData, meshes.removed.color, `${name}_removed`);
+                if (mesh) {
+                    loadedMeshes.push(mesh);
+                    scene.add(mesh);
+                }
+            }
+        }
+        
+        // Load added parts (blue - False Negatives)
+        if (meshes.added) {
+            const response = await fetch(meshes.added.file);
+            if (response.ok) {
+                const meshData = await response.json();
+                const mesh = createMeshFromData(meshData, meshes.added.color, `${name}_added`);
+                if (mesh) {
+                    loadedMeshes.push(mesh);
+                    scene.add(mesh);
+                }
+            }
+        }
+        
+        // Store all meshes for this vertebra
+        if (loadedMeshes.length > 0) {
+            vertebraeMeshes[name] = loadedMeshes;
+        }
+        
+    } catch (error) {
+        console.error(`Error loading difference meshes for ${name}:`, error);
+    }
+}
+
+function createMeshFromData(meshData, color, name) {
+    try {
+        // Create Three.js geometry
+        const geometry = new THREE.BufferGeometry();
+        
+        // Add vertices
+        const vertices = new Float32Array(meshData.vertices.flat());
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        
+        // Add faces (indices)
+        const indices = new Uint32Array(meshData.faces.flat());
+        geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+        
+        // Compute normals for smooth shading
+        geometry.computeVertexNormals();
+        
+        // Create material
+        const material = new THREE.MeshPhongMaterial({
+            color: new THREE.Color(color),
+            shininess: 30,
+            specular: 0xffffff,
+            flatShading: false,
+            side: THREE.DoubleSide,
+            transparent: false,
+            opacity: 1.0
+        });
+        
+        // Create mesh
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.name = name;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        
+        return mesh;
+        
+    } catch (error) {
+        console.error(`Error creating mesh ${name}:`, error);
+        return null;
+    }
+}
+
 function clearMeshes() {
-    Object.values(vertebraeMeshes).forEach(mesh => {
-        scene.remove(mesh);
-        mesh.geometry.dispose();
-        mesh.material.dispose();
+    Object.values(vertebraeMeshes).forEach(meshOrArray => {
+        if (Array.isArray(meshOrArray)) {
+            // Difference mode - array of meshes
+            meshOrArray.forEach(mesh => {
+                scene.remove(mesh);
+                mesh.geometry.dispose();
+                mesh.material.dispose();
+            });
+        } else {
+            // Normal mode - single mesh
+            scene.remove(meshOrArray);
+            meshOrArray.geometry.dispose();
+            meshOrArray.material.dispose();
+        }
     });
     vertebraeMeshes = {};
 }
 
 function toggleVertebra(name, visible) {
-    const mesh = vertebraeMeshes[name];
-    if (mesh) {
-        mesh.visible = visible;
+    const meshOrArray = vertebraeMeshes[name];
+    if (meshOrArray) {
+        if (Array.isArray(meshOrArray)) {
+            // Difference mode - toggle all parts
+            meshOrArray.forEach(mesh => {
+                mesh.visible = visible;
+            });
+        } else {
+            // Normal mode - single mesh
+            meshOrArray.visible = visible;
+        }
     }
 }
 
@@ -455,11 +617,16 @@ function updateStatusBadge(processingType) {
     const badge = document.getElementById('status-badge');
     const badgeValue = badge.querySelector('.badge-value');
     
-    if (processingType === 'cleaned') {
+    // Remove all mode classes
+    badge.classList.remove('cleaned', 'difference');
+    
+    if (processingType === 'difference') {
+        badge.classList.add('difference');
+        badgeValue.textContent = 'Difference';
+    } else if (processingType === 'cleaned') {
         badge.classList.add('cleaned');
         badgeValue.textContent = 'Post-Processed';
     } else {
-        badge.classList.remove('cleaned');
         badgeValue.textContent = 'Raw Prediction';
     }
     

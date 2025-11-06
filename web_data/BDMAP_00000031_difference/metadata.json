@@ -1,0 +1,597 @@
+{
+  "patient_id": "BDMAP_00000031",
+  "visualization_type": "difference",
+  "description": "Difference between raw and post-processed predictions",
+  "shape": [
+    301,
+    276,
+    651
+  ],
+  "spacing": [
+    0.9140625,
+    0.9140625,
+    0.699999988079071
+  ],
+  "colors": {
+    "removed": "#FF4444",
+    "added": "#4444FF"
+  },
+  "vertebrae": {
+    "C1": {
+      "name": "C1",
+      "label": 1,
+      "raw_voxels": 18429,
+      "cleaned_voxels": 17207,
+      "removed_voxels": 1501,
+      "added_voxels": 279,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C1_removed.json",
+          "color": "#FF4444",
+          "vertices": 6113,
+          "faces": 12518,
+          "voxels": 1501
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C1_added.json",
+          "color": "#4444FF",
+          "vertices": 1417,
+          "faces": 2470,
+          "voxels": 279
+        }
+      }
+    },
+    "C2": {
+      "name": "C2",
+      "label": 2,
+      "raw_voxels": 20354,
+      "cleaned_voxels": 19113,
+      "removed_voxels": 1612,
+      "added_voxels": 371,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C2_removed.json",
+          "color": "#FF4444",
+          "vertices": 6444,
+          "faces": 13348,
+          "voxels": 1612
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C2_added.json",
+          "color": "#4444FF",
+          "vertices": 1803,
+          "faces": 3314,
+          "voxels": 371
+        }
+      }
+    },
+    "C3": {
+      "name": "C3",
+      "label": 3,
+      "raw_voxels": 20387,
+      "cleaned_voxels": 19062,
+      "removed_voxels": 1741,
+      "added_voxels": 416,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C3_removed.json",
+          "color": "#FF4444",
+          "vertices": 6845,
+          "faces": 14094,
+          "voxels": 1741
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C3_added.json",
+          "color": "#4444FF",
+          "vertices": 1904,
+          "faces": 3544,
+          "voxels": 416
+        }
+      }
+    },
+    "C4": {
+      "name": "C4",
+      "label": 4,
+      "raw_voxels": 15718,
+      "cleaned_voxels": 14551,
+      "removed_voxels": 1690,
+      "added_voxels": 523,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C4_removed.json",
+          "color": "#FF4444",
+          "vertices": 6568,
+          "faces": 13288,
+          "voxels": 1690
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C4_added.json",
+          "color": "#4444FF",
+          "vertices": 2206,
+          "faces": 4132,
+          "voxels": 523
+        }
+      }
+    },
+    "C5": {
+      "name": "C5",
+      "label": 5,
+      "raw_voxels": 6935,
+      "cleaned_voxels": 2244,
+      "removed_voxels": 4881,
+      "added_voxels": 190,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C5_removed.json",
+          "color": "#FF4444",
+          "vertices": 7060,
+          "faces": 14336,
+          "voxels": 4881
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C5_added.json",
+          "color": "#4444FF",
+          "vertices": 742,
+          "faces": 1440,
+          "voxels": 190
+        }
+      }
+    },
+    "C6": {
+      "name": "C6",
+      "label": 6,
+      "raw_voxels": 18145,
+      "cleaned_voxels": 14675,
+      "removed_voxels": 3818,
+      "added_voxels": 348,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C6_removed.json",
+          "color": "#FF4444",
+          "vertices": 7889,
+          "faces": 15978,
+          "voxels": 3818
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C6_added.json",
+          "color": "#4444FF",
+          "vertices": 1566,
+          "faces": 2812,
+          "voxels": 348
+        }
+      }
+    },
+    "C7": {
+      "name": "C7",
+      "label": 7,
+      "raw_voxels": 17800,
+      "cleaned_voxels": 11141,
+      "removed_voxels": 7074,
+      "added_voxels": 415,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/C7_removed.json",
+          "color": "#FF4444",
+          "vertices": 9337,
+          "faces": 18830,
+          "voxels": 7074
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/C7_added.json",
+          "color": "#4444FF",
+          "vertices": 1823,
+          "faces": 3406,
+          "voxels": 415
+        }
+      }
+    },
+    "T1": {
+      "name": "T1",
+      "label": 8,
+      "raw_voxels": 16482,
+      "cleaned_voxels": 15087,
+      "removed_voxels": 2154,
+      "added_voxels": 759,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T1_removed.json",
+          "color": "#FF4444",
+          "vertices": 8035,
+          "faces": 16378,
+          "voxels": 2154
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T1_added.json",
+          "color": "#4444FF",
+          "vertices": 3121,
+          "faces": 5874,
+          "voxels": 759
+        }
+      }
+    },
+    "T2": {
+      "name": "T2",
+      "label": 9,
+      "raw_voxels": 10501,
+      "cleaned_voxels": 6197,
+      "removed_voxels": 4654,
+      "added_voxels": 350,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T2_removed.json",
+          "color": "#FF4444",
+          "vertices": 8718,
+          "faces": 17708,
+          "voxels": 4654
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T2_added.json",
+          "color": "#4444FF",
+          "vertices": 1516,
+          "faces": 2784,
+          "voxels": 350
+        }
+      }
+    },
+    "T3": {
+      "name": "T3",
+      "label": 10,
+      "raw_voxels": 16743,
+      "cleaned_voxels": 15178,
+      "removed_voxels": 2225,
+      "added_voxels": 660,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T3_removed.json",
+          "color": "#FF4444",
+          "vertices": 8777,
+          "faces": 17954,
+          "voxels": 2225
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T3_added.json",
+          "color": "#4444FF",
+          "vertices": 2849,
+          "faces": 5182,
+          "voxels": 660
+        }
+      }
+    },
+    "T4": {
+      "name": "T4",
+      "label": 11,
+      "raw_voxels": 12219,
+      "cleaned_voxels": 9914,
+      "removed_voxels": 2784,
+      "added_voxels": 479,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T4_removed.json",
+          "color": "#FF4444",
+          "vertices": 7418,
+          "faces": 15108,
+          "voxels": 2784
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T4_added.json",
+          "color": "#4444FF",
+          "vertices": 1956,
+          "faces": 3692,
+          "voxels": 479
+        }
+      }
+    },
+    "T5": {
+      "name": "T5",
+      "label": 12,
+      "raw_voxels": 9606,
+      "cleaned_voxels": 7538,
+      "removed_voxels": 2262,
+      "added_voxels": 194,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T5_removed.json",
+          "color": "#FF4444",
+          "vertices": 6776,
+          "faces": 13868,
+          "voxels": 2262
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T5_added.json",
+          "color": "#4444FF",
+          "vertices": 922,
+          "faces": 1700,
+          "voxels": 194
+        }
+      }
+    },
+    "T6": {
+      "name": "T6",
+      "label": 13,
+      "raw_voxels": 8687,
+      "cleaned_voxels": 6763,
+      "removed_voxels": 2117,
+      "added_voxels": 193,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T6_removed.json",
+          "color": "#FF4444",
+          "vertices": 5724,
+          "faces": 11756,
+          "voxels": 2117
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T6_added.json",
+          "color": "#4444FF",
+          "vertices": 892,
+          "faces": 1616,
+          "voxels": 193
+        }
+      }
+    },
+    "T7": {
+      "name": "T7",
+      "label": 14,
+      "raw_voxels": 7354,
+      "cleaned_voxels": 6155,
+      "removed_voxels": 1326,
+      "added_voxels": 127,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T7_removed.json",
+          "color": "#FF4444",
+          "vertices": 4485,
+          "faces": 9270,
+          "voxels": 1326
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T7_added.json",
+          "color": "#4444FF",
+          "vertices": 646,
+          "faces": 1088,
+          "voxels": 127
+        }
+      }
+    },
+    "T8": {
+      "name": "T8",
+      "label": 15,
+      "raw_voxels": 6834,
+      "cleaned_voxels": 5773,
+      "removed_voxels": 1221,
+      "added_voxels": 160,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T8_removed.json",
+          "color": "#FF4444",
+          "vertices": 4292,
+          "faces": 8884,
+          "voxels": 1221
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T8_added.json",
+          "color": "#4444FF",
+          "vertices": 719,
+          "faces": 1278,
+          "voxels": 160
+        }
+      }
+    },
+    "T9": {
+      "name": "T9",
+      "label": 16,
+      "raw_voxels": 6922,
+      "cleaned_voxels": 5909,
+      "removed_voxels": 1111,
+      "added_voxels": 98,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T9_removed.json",
+          "color": "#FF4444",
+          "vertices": 4225,
+          "faces": 8718,
+          "voxels": 1111
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T9_added.json",
+          "color": "#4444FF",
+          "vertices": 514,
+          "faces": 824,
+          "voxels": 98
+        }
+      }
+    },
+    "T10": {
+      "name": "T10",
+      "label": 17,
+      "raw_voxels": 6855,
+      "cleaned_voxels": 5973,
+      "removed_voxels": 1002,
+      "added_voxels": 120,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T10_removed.json",
+          "color": "#FF4444",
+          "vertices": 4080,
+          "faces": 8360,
+          "voxels": 1002
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T10_added.json",
+          "color": "#4444FF",
+          "vertices": 587,
+          "faces": 1014,
+          "voxels": 120
+        }
+      }
+    },
+    "T11": {
+      "name": "T11",
+      "label": 18,
+      "raw_voxels": 5181,
+      "cleaned_voxels": 4311,
+      "removed_voxels": 1047,
+      "added_voxels": 177,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T11_removed.json",
+          "color": "#FF4444",
+          "vertices": 3792,
+          "faces": 7856,
+          "voxels": 1047
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T11_added.json",
+          "color": "#4444FF",
+          "vertices": 708,
+          "faces": 1376,
+          "voxels": 177
+        }
+      }
+    },
+    "T12": {
+      "name": "T12",
+      "label": 19,
+      "raw_voxels": 4721,
+      "cleaned_voxels": 3919,
+      "removed_voxels": 1032,
+      "added_voxels": 230,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/T12_removed.json",
+          "color": "#FF4444",
+          "vertices": 3673,
+          "faces": 7590,
+          "voxels": 1032
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/T12_added.json",
+          "color": "#4444FF",
+          "vertices": 947,
+          "faces": 1850,
+          "voxels": 230
+        }
+      }
+    },
+    "L1": {
+      "name": "L1",
+      "label": 20,
+      "raw_voxels": 4257,
+      "cleaned_voxels": 3648,
+      "removed_voxels": 911,
+      "added_voxels": 302,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/L1_removed.json",
+          "color": "#FF4444",
+          "vertices": 3355,
+          "faces": 6962,
+          "voxels": 911
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/L1_added.json",
+          "color": "#4444FF",
+          "vertices": 1026,
+          "faces": 1988,
+          "voxels": 302
+        }
+      }
+    },
+    "L2": {
+      "name": "L2",
+      "label": 21,
+      "raw_voxels": 3812,
+      "cleaned_voxels": 3190,
+      "removed_voxels": 837,
+      "added_voxels": 215,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/L2_removed.json",
+          "color": "#FF4444",
+          "vertices": 3031,
+          "faces": 6270,
+          "voxels": 837
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/L2_added.json",
+          "color": "#4444FF",
+          "vertices": 823,
+          "faces": 1602,
+          "voxels": 215
+        }
+      }
+    },
+    "L3": {
+      "name": "L3",
+      "label": 22,
+      "raw_voxels": 3737,
+      "cleaned_voxels": 3195,
+      "removed_voxels": 747,
+      "added_voxels": 205,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/L3_removed.json",
+          "color": "#FF4444",
+          "vertices": 2841,
+          "faces": 5874,
+          "voxels": 747
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/L3_added.json",
+          "color": "#4444FF",
+          "vertices": 806,
+          "faces": 1560,
+          "voxels": 205
+        }
+      }
+    },
+    "L4": {
+      "name": "L4",
+      "label": 23,
+      "raw_voxels": 5446,
+      "cleaned_voxels": 4807,
+      "removed_voxels": 824,
+      "added_voxels": 185,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/L4_removed.json",
+          "color": "#FF4444",
+          "vertices": 3343,
+          "faces": 6878,
+          "voxels": 824
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/L4_added.json",
+          "color": "#4444FF",
+          "vertices": 801,
+          "faces": 1446,
+          "voxels": 185
+        }
+      }
+    },
+    "L5": {
+      "name": "L5",
+      "label": 24,
+      "raw_voxels": 4746,
+      "cleaned_voxels": 3990,
+      "removed_voxels": 943,
+      "added_voxels": 187,
+      "meshes": {
+        "removed": {
+          "file": "web_data/BDMAP_00000031_difference/L5_removed.json",
+          "color": "#FF4444",
+          "vertices": 3707,
+          "faces": 7594,
+          "voxels": 943
+        },
+        "added": {
+          "file": "web_data/BDMAP_00000031_difference/L5_added.json",
+          "color": "#4444FF",
+          "vertices": 729,
+          "faces": 1398,
+          "voxels": 187
+        }
+      }
+    }
+  }
+}
