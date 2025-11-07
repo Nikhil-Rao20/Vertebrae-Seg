@@ -15,7 +15,6 @@ The viewer enables researchers and clinicians to interactively explore vertebrae
   </figure>
 </div>
 
-Note: adjust the filenames if your asset folder uses different names or paths.
 
 ## 🌟 Key Features
 
